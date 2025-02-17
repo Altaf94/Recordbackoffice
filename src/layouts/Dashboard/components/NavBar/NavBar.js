@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 function NavBar(props) {
   const { openMenu, closeMenu, className, ...rest } = props;
   const classes = useStyles();

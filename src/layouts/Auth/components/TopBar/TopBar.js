@@ -1,6 +1,6 @@
 import { AppBar, Toolbar, Typography } from "@material-ui/core";
 import React from "react";
-import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
+import DashboardOutlinedIcon from "@material-ui/icons/DashboardOutlined";
 
 function TopBar() {
   return (

@@ -3,13 +3,14 @@ import { Home } from "../components/Home";
 import { Login } from "../components/Login";
 import Table from "../components/Table";
 import AuthLayout from "../layouts/Auth";
-import DashboardLayout from '../layouts/Dashboard';
+import DashboardLayout from "../layouts/Dashboard";
+import NewEmail from "../Container/NewEmailPagination/NewEmail";
 
 export const routes = [
   {
     path: "/",
     exact: true,
-    component: () =>  <Redirect to="/home" />,
+    component: () => <Redirect to="/home" />,
   },
   {
     path: "/auth",
@@ -23,20 +24,26 @@ export const routes = [
     ],
   },
   {
-    route: '*',
+    route: "*",
     component: DashboardLayout,
     routes: [
       {
         path: "/home",
         exact: true,
-        component: (props) => {return props.isAuthenticated ? <Home /> : <Redirect to="/auth/login" />}
-          ,
+        component: (props) =>
+          props.isAuthenticated ? <Home /> : <Redirect to="/auth/login" />,
       },
       {
-        path:"/table",
+        path: "/table",
         exact: true,
-        component: (props) => {return props.isAuthenticated ? <Table /> : <Redirect to="/auth/login" />}
-      }
-    ]
-  }
+        component: (props) =>
+          props.isAuthenticated ? <Table /> : <Redirect to="/auth/login" />,
+      },
+      {
+        path: "/newemail",
+        exact: true,
+        component: (props) => <NewEmail />,
+      },
+    ],
+  },
 ];

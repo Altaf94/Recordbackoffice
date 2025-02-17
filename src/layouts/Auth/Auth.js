@@ -19,7 +19,6 @@ function Auth(props) {
   const classes = useStyles();
   return (
     <Fragment>
-      <TopBar />
       <main className={classes.content}>{renderRoutes(route.routes)}</main>
     </Fragment>
   );
