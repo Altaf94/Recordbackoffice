@@ -1,24 +1,27 @@
 import React, { useState } from "react";
-import "./NewEmail.css";
+import "./createUser.css";
 import { connect } from "react-redux";
 
-const NewEmail = () => {
-  const data = Array.from({ length: 50 }, (_, index) => ({
-    date: `2025/02/${15 - (index % 28)} ${10 + (index % 10)}:23:00`,
-    cnic: `42101061133${index + 10}`,
-    firstName: `User${index + 1}`,
-    lastName: `Test${index + 1}`,
-    dateOfBirth: `199${index % 10}/0${(index % 9) + 1}/15`,
-    oldMobile: `0311${Math.floor(1000000 + Math.random() * 9000000)}`,
-    newMobile: `0322${Math.floor(1000000 + Math.random() * 9000000)}`,
-    oldEmail: `olduser${index + 1}@email.com`,
-    newEmail: `user${index + 1}@email.com`,
-    oldAddress: `Street ${index + 1}, City ${(index % 5) + 1}`,
-    status:
-      index % 3 === 0 ? "Pending" : index % 3 === 1 ? "Approved" : "Rejected",
-  }));
+const CreateUserScreen = () => {
+  const [data, setData] = useState(
+    Array.from({ length: 50 }, (_, index) => ({
+      date: `2025/02/${15 - (index % 28)} ${10 + (index % 10)}:23:00`,
+      cnic: `42101061133${index + 10}`,
+      firstName: `User${index + 1}`,
+      lastName: `Test${index + 1}`,
+      dateOfBirth: `19${70 + (index % 30)}/01/01`, // Simulating different birth years
+      newMobile: `0322${Math.floor(1000000 + Math.random() * 9000000)}`,
+      newEmail: `user${index + 1}@email.com`,
+      status:
+        index % 3 === 0
+          ? "Pending"
+          : index % 3 === 1
+          ? "Form Sent"
+          : "Form Received",
+    }))
+  );
 
-  const [statusFilter, setStatusFilter] = useState("Pending");
+  const [statusFilter, setStatusFilter] = useState("");
   const [cnicFilter, setCnicFilter] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -55,9 +58,15 @@ const NewEmail = () => {
     setCurrentPage(1);
   };
 
+  const updateStatus = (index, newStatus) => {
+    const updatedData = [...data];
+    updatedData[index].status = newStatus;
+    setData(updatedData);
+  };
+
   return (
     <div className="new-email-container">
-      <h2 style={{ padding: "10px" }}>Change Email/Mobile Request</h2>
+      <h2 style={{ padding: "10px" }}> Create User (Above 18)</h2>
 
       {selectedDetail && (
         <div className="detail-overlay">
@@ -77,19 +86,10 @@ const NewEmail = () => {
               <strong>Date of Birth:</strong> {selectedDetail.dateOfBirth}
             </p>
             <p>
-              <strong>Old Mobile:</strong> {selectedDetail.oldMobile}
-            </p>
-            <p>
               <strong>New Mobile:</strong> {selectedDetail.newMobile}
             </p>
             <p>
-              <strong>Old Email:</strong> {selectedDetail.oldEmail}
-            </p>
-            <p>
               <strong>New Email:</strong> {selectedDetail.newEmail}
-            </p>
-            <p>
-              <strong>Old Address:</strong> {selectedDetail.oldAddress}
             </p>
             <p>
               <strong>Status:</strong> {selectedDetail.status}
@@ -117,8 +117,8 @@ const NewEmail = () => {
         >
           <option value="">All Status</option>
           <option value="Pending">Pending</option>
-          <option value="Approved">Approved</option>
-          <option value="Rejected">Rejected</option>
+          <option value="Form Sent">Form Sent</option>
+          <option value="Form Received">Form Received</option>
         </select>
         <input
           type="text"
@@ -148,13 +148,9 @@ const NewEmail = () => {
               <th>Date/Time Request Received</th>
               <th>CNIC</th>
               <th>First Name</th>
-
               <th>Date of Birth</th>
-              <th>Old Mobile</th>
-              <th>New Mobile</th>
-              <th>Old Email</th>
-              <th>New Email</th>
-              <th>Old Address</th>
+              <th>Mobile</th>
+              <th>Email</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -165,20 +161,25 @@ const NewEmail = () => {
                 <td>{item.date}</td>
                 <td>{item.cnic}</td>
                 <td>{item.firstName}</td>
-
                 <td>{item.dateOfBirth}</td>
-                <td>{item.oldMobile}</td>
                 <td>{item.newMobile}</td>
-                <td>{item.oldEmail}</td>
                 <td>{item.newEmail}</td>
-                <td>{item.oldAddress}</td>
-                <td>{item.status}</td>
+                <td>
+                  <select
+                    value={item.status}
+                    onChange={(e) => updateStatus(index, e.target.value)}
+                  >
+                    <option value="Pending">Pending</option>
+                    <option value="Form Sent">Form Sent</option>
+                    <option value="Form Received">Form Received</option>
+                  </select>
+                </td>
                 <td>
                   <button
                     className="details-button"
                     onClick={() => setSelectedDetail(item)}
                   >
-                    Details
+                    Update
                   </button>
                 </td>
               </tr>
@@ -206,4 +207,4 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.loggedIn,
 });
 
-export default connect(mapStateToProps)(NewEmail);
+export default connect(mapStateToProps)(CreateUserScreen);
